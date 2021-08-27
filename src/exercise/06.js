@@ -3,7 +3,6 @@
 
 import * as React from 'react';
 import {useState} from 'react';
-import {useRef} from 'react';
 
 function UsernameForm({onSubmitUsername}) {
   // 🐨 add a submit event handler here (`handleSubmit`).
@@ -21,16 +20,12 @@ function UsernameForm({onSubmitUsername}) {
 
   // 🐨 make sure to associate the label to the input.
   // to do so, set the value of 'htmlFor' prop of the label to the id of input
-
-  const [error, setError] = useState(null);
-
-  const userNameInputRef = useRef();
+  const [username, setUsername] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    const username = userNameInputRef.current.value;
-    if (username && !error) {
+    if (username) {
       onSubmitUsername(username);
     }
   }
@@ -40,32 +35,24 @@ function UsernameForm({onSubmitUsername}) {
    * @param {React.ChangeEvent} e
    */
   function handleChange(e) {
-    const value = e.target.value;
-    if (value === value.toLowerCase() && error) {
-      setError(null);
-    } else {
-      setError('Username must be lower case');
-    }
+    const value = e.target.value.toLowerCase();
+
+    setUsername(value);
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="userNameInput">Username:</label>
+        <label htmlFor="usernameInput">Username:</label>
         <input
-          ref={userNameInputRef}
           type="text"
-          id="userNameInput"
+          id="usernameInput"
+          name="usernameInput"
           onChange={handleChange}
+          value={username}
         />
-
-        <p className="" role="alert">
-          {error}
-        </p>
       </div>
-      <button type="submit" disabled={!!error}>
-        Submit
-      </button>
+      <button type="submit">Submit</button>
     </form>
   );
 }
